@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,9 @@ import com.pio.cadunico.Repository.UsuarioRepository;
 import com.pio.cadunico.model.Usuario;
 import com.pio.cadunico.service.UsuarioService;
 
-@RequestMapping("/usuario")
+@CrossOrigin
 @RestController
+@RequestMapping("/usuario")
 public class UsuarioController {
 	
 	@Autowired
@@ -31,12 +33,12 @@ public class UsuarioController {
 	
 	@Autowired
 	UsuarioRepository usuarioRepository;
-	
+		
 	@GetMapping
 	public List<Usuario> listar() {
 		return usuarioRepository.findAll();
 	}
-	
+		
 	@GetMapping("/{usuarioId}")
 	public ResponseEntity<Usuario> buscar(@PathVariable Long usuarioId) {
 		Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);

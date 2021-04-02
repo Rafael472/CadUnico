@@ -14,6 +14,7 @@
 	<name>CadUnico</name>
 	<description>Cadastro de Pessoas/Usuarios</description>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
