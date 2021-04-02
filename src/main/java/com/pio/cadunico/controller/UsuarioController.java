@@ -23,7 +23,7 @@ import com.pio.cadunico.Repository.UsuarioRepository;
 import com.pio.cadunico.model.Usuario;
 import com.pio.cadunico.service.UsuarioService;
 
-@CrossOrigin
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
