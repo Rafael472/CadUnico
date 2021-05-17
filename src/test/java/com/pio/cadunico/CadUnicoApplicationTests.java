@@ -1,4 +1,4 @@
-package com.pio.cadunico;
+package com.pio.CadUnico;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

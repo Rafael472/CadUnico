@@ -1,4 +1,4 @@
-package com.pio.cadunico.model;
+package com.pio.CadUnico.model;
 
 import java.time.LocalDate;
 
@@ -44,8 +44,7 @@ public class Usuario {
 	@Column(name="DSC_SITUACAO")
 	private String situacao;
 	
-	@NotNull
-	@Column(name="DTA_CRIACAO")
+	@Column(name="DTA_CRIACAO", nullable = false)
 	private LocalDate dataCriacao;
 
 	public Long getId() {

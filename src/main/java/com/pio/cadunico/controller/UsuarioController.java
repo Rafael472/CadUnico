@@ -1,44 +1,46 @@
-package com.pio.cadunico.controller;
+package com.pio.CadUnico.controller;
 
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.pio.cadunico.Repository.UsuarioRepository;
-import com.pio.cadunico.model.Usuario;
-import com.pio.cadunico.service.UsuarioService;
+import com.pio.CadUnico.model.Usuario;
+import com.pio.CadUnico.repository.UsuarioRepository;
+import com.pio.CadUnico.service.UsuarioService;
 
-@CrossOrigin(origins="*")
-@RestController
+@Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
+
+	@Autowired UsuarioService usuarioService;
 	
-	@Autowired
-	UsuarioService usuarioService;
+	@Autowired UsuarioRepository usuarioRepository;
 	
-	@Autowired
-	UsuarioRepository usuarioRepository;
-		
-	@GetMapping
-	public List<Usuario> listar() {
+	@RequestMapping({"","/"})
+	public ModelAndView pagina() {
+		ModelAndView mv = new ModelAndView("CadastroUsuario");
+		return mv;
+	}
+	
+	@GetMapping("/listar")
+	public @ResponseBody List<Usuario> listar() {
 		return usuarioRepository.findAll();
 	}
-		
+	
 	@GetMapping("/{usuarioId}")
 	public ResponseEntity<Usuario> buscar(@PathVariable Long usuarioId) {
 		Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
@@ -52,12 +54,12 @@ public class UsuarioController {
 	
 	@PostMapping("/cadastrar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario cadastrar(@Valid @RequestBody Usuario usuario){
+	public @ResponseBody Usuario cadastrar(@Validated @RequestBody Usuario usuario){
 		return usuarioService.salvar(usuario);
 	}
 	
 	@PutMapping("/{usuarioId}")
-	public ResponseEntity<Usuario> atualizar(@Valid @PathVariable Long usuarioId, @RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> atualizar(@Validated @PathVariable Long usuarioId, @RequestBody Usuario usuario){
 		
 		if(!usuarioRepository.existsById(usuarioId))
 			return ResponseEntity.notFound().build();
@@ -68,7 +70,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuario);
 	}
 
-	@DeleteMapping("/{usuarioId}")
+	@RequestMapping("/excluir/{usuarioId}")
 	public ResponseEntity<Void> remover(@PathVariable Long usuarioId){
 		if(!usuarioRepository.existsById(usuarioId))
 			return ResponseEntity.notFound().build();
@@ -77,4 +79,5 @@ public class UsuarioController {
 		
 		return ResponseEntity.noContent().build();
 	}
+	
 }
