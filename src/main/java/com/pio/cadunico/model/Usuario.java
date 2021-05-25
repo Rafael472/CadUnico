@@ -18,28 +18,28 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
-	@Size(max=255)
+	@NotBlank(message = "Nome não deve estar em branco ou nulo.")
+	@Size(max=255, message = "Nome deve conter no máximo 255 caracteres")
 	@Column(name="NME_USUARIO")
 	private String nome;
 	
-	@NotBlank
-	@Email
-	@Size(max=255)
+	@NotBlank(message = "Email não deve estar em branco ou nulo.")
+	@Email(message = "Email deve estar no formato correto. Ex: exemplo@exemplo.com")
+	@Size(max=255, message = "Email deve conter no máximo 255 caracteres")
 	@Column(name = "DSC_EMAIL")
 	private String email;
 	
-	@NotBlank
-	@Size(max=11)
+	@NotBlank(message = "CPF não deve estar em branco ou nulo.")
+	@Size(min=11, max=11, message = "CPF deve conter 11 caracteres")
 	@Column(name = "COD_CPF")
 	private String cpf;
 	
-	@NotBlank
-	@Size(max=255)
+	@NotBlank(message = "Senha não deve estar em branco ou nulo.")
+	@Size(max=255, message = "Senha deve conter no máximo 255 caracteres")
 	@Column(name="DSC_SENHA")
 	private String senha;
 	
-	@NotBlank
+	@NotBlank(message = "Situação não deve estar em branco ou nulo.")
 	@Column(name="DSC_SITUACAO")
 	private String situacao;
 	

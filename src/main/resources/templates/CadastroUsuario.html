@@ -27,6 +27,7 @@
 			<h5>Cadastro de Usuários</h5>
 		</div>
 		<div class="card-body">
+			<div id="msgRetorno"></div>
 			<div class="form-group">
 				<button type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#adicionarEditarModal' data-acao="ADICIONAR">Adicionar</button>
 			</div>
@@ -57,7 +58,7 @@
 		    </table>
 	    </div>
     </form>
-    <!-- Modal Adicionar -->
+    <!-- Modal Adicionar/Editar -->
     <div class="modal fade" id="adicionarEditarModal" tabindex="-1" role="dialog" aria-labelledby="adicionarModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -99,12 +100,12 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-					<button type="button" class="btn btn-primary" id="btnGravar" onClick="gravar()">Adicionar</button>
+					<button type="button" class="btn btn-primary" id="btnGravar">Adicionar</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- FIM MODAL -->
+	<!-- Fim Modal Adicionar/Editar -->
 	
 	<!-- Modal Exclusão -->
 	<div class="modal fade" id="exclusaoModal" tabindex="-1" onLoad="jsAbreModal();" aria-labelledby="exclusaoModalLabel" aria-hidden="true">
@@ -132,12 +133,13 @@
 		    </form>
 	  	</div>
 	</div>
-	<!-- FIM MODAL -->
+	<!-- Fim Modal Exclusão -->
 	<script>
-		getAll(); //axios.js - busca todos os usuários para carregar a tabela;
-		function resultGetAll(usuarios) { //resultado de getAll(), tratando retorno;
-			rows = "";
-			
+		//busca todos os usuários para carregar a tabela - axios.js;	
+		getAll();
+		
+		//resultado de getAll() - axios.js;
+		function resultGetAll(usuarios) {
 			var table = $('#tabela').DataTable();
 			table.clear().draw();
 			usuarios.map(function(usuario) {
@@ -157,10 +159,41 @@
 				] ).draw();
 	    	});
 			$('[rel="tooltip"]').tooltip();
-			setTimeout(function(){
-				carregarTabela();
-			}, 200);
+			carregarTabela();
 		};
+		
+		//resultado de getUsuario(usuario) - axios.js;
+		function resultGetUsuario(response){
+			let usuario = response;
+			$("#txtNome").val(usuario.nome);
+			$("#txtEmail").val(usuario.email);
+			$("#txtCPF").val(usuario.cpf);
+			$("#txtSenha").val(usuario.senha);
+			$("#ddlSituacao").val(usuario.situacao);			
+		}
+		
+		//resultado de adicionar(usuario) - axios.js;
+		async function resultAdicionar(response){
+			await getAll();
+			$('[role="msgAdicionar"]').addClass('alert alert-success');
+			$('[role="msgAdicionar"]').html('Usuário cadastrado com sucesso.');
+			limparCampos();
+		}
+		
+		//resultado de editar(usuario) - axios.js;
+		async function resultEditar(response){
+			await getAll();
+			$('#msgRetorno').addClass('alert alert-success');
+			$('#msgRetorno').html('Usuário editado com sucesso.');
+			$('#adicionarEditarModal').modal('hide');
+		}
+		
+		//resultado de deletar(id) - axios.js;
+		async function resultDeletar(response){			
+			await getAll();
+			$('#exclusaoModal').modal('hide');
+		}
+		
 	</script>
 </body>
 </html>

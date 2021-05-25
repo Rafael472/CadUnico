@@ -13,6 +13,7 @@ $(function() {
 	});
 });
 
+//Formata String de yyyy-mm-dd para dd/mm/yyyy
 function FormataStringData(data) {
 	var dia  = data.split("-")[2];
 	var mes  = data.split("-")[1];
@@ -21,6 +22,7 @@ function FormataStringData(data) {
 	return dia + '/' + mes + '/' + ano;
 }
 
+//limpa campos do modal Adicionar/Editar
 function limparCampos(){
 	$("#txtNome").val('');
 	$("#txtEmail").val('');
@@ -35,6 +37,8 @@ $(function() {
 	$('#adicionarEditarModal').on('show.bs.modal', function(event) {
 		$('[role="msgAdicionar"]').removeClass();
 		$('[role="msgAdicionar"]').html('');
+		$('#codigoUsuarioEditar').val('');
+		$('#acao').val('');
 		limparCampos();
 		
 		var button = $(event.relatedTarget);
@@ -50,30 +54,36 @@ $(function() {
 			getUsuario(id);
 		}else{
 			$("#adicionarEditarTitle").html('Adicionar Usuário');
+			$('#acao').val('ADICIONAR');
 			$("#btnGravar").html('Adicionar');
 		}	
 	});
+	
+	$('#btnGravar').click(function() {
+		//prepara campo para mensage de retorno
+		$('[role="msgAdicionar"]').removeClass();
+		$('[role="msgAdicionar"]').html('');
+		$('#msgRetorno').removeClass();
+		$('#msgRetorno').html('');
+		
+		let acao = $('#acao').val();
+		let usuario = {
+				"nome":  $("#txtNome").val(),
+				"email": $("#txtEmail").val(),
+				"cpf":   $("#txtCPF").val(),
+				"senha": $("#txtSenha").val(),
+				"situacao": $("#ddlSituacao").val()
+		};
+		if(acao == 'EDITAR'){
+			usuario.id = $('#codigoUsuarioEditar').val();
+			editar(usuario);
+		}else{
+			adicionar(usuario);	
+		}
+	});
 });
 
-//modal adicionar/editar
-function gravar(){
-	let acao = $('#acao').val();
-	let usuario = {
-			"nome":  $("#txtNome").val(),
-			"email": $("#txtEmail").val(),
-			"cpf":   $("#txtCPF").val(),
-			"senha": $("#txtSenha").val(),
-			"situacao": $("#ddlSituacao").val()
-	};
-	if(acao == 'EDITAR'){
-		usuario.id = $('#codigoUsuarioEditar').val();
-		saveUser(usuario);
-	}else{
-		save(usuario);	
-	}
-}
-
-//modal excluir
+//carrega modal excluir
 $(function() {
 	$('#exclusaoModal').on('show.bs.modal', function(event) {
 		var button = $(event.relatedTarget);
