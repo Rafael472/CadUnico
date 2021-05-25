@@ -8,8 +8,8 @@ $(function() {
 
 $(function() {
 	$('[data-toggle="modal"]').click(function() {
-	  $('[role="alert"]').html('');
-	  $('[role="alert"]').removeClass();
+	  $('[role="msgAdicionar"]').html('');
+	  $('[role="msgAdicionar"]').removeClass();
 	});
 });
 
@@ -29,11 +29,53 @@ function limparCampos(){
 	$("#ddlSituacao").val('ATIVO');
 }
 
+
+//carrega modal adicionar/editar
+$(function() {
+	$('#adicionarEditarModal').on('show.bs.modal', function(event) {
+		$('[role="msgAdicionar"]').removeClass();
+		$('[role="msgAdicionar"]').html('');
+		limparCampos();
+		
+		var button = $(event.relatedTarget);
+		const acao = button.data('acao');
+		
+		if(acao == "EDITAR"){
+			$("#adicionarEditarTitle").html('Editar Usuário');
+			$("#btnGravar").html('Editar');
+			$('#acao').val('EDITAR');
+			$('#codigoUsuarioEditar').val(button.data('codigo'));
+			
+			let id = button.data('codigo');
+			getUsuario(id);
+		}else{
+			$("#adicionarEditarTitle").html('Adicionar Usuário');
+			$("#btnGravar").html('Adicionar');
+		}	
+	});
+});
+
+//modal adicionar/editar
+function gravar(){
+	let acao = $('#acao').val();
+	let usuario = {
+			"nome":  $("#txtNome").val(),
+			"email": $("#txtEmail").val(),
+			"cpf":   $("#txtCPF").val(),
+			"senha": $("#txtSenha").val(),
+			"situacao": $("#ddlSituacao").val()
+	};
+	if(acao == 'EDITAR'){
+		usuario.id = $('#codigoUsuarioEditar').val();
+		saveUser(usuario);
+	}else{
+		save(usuario);	
+	}
+}
+
 //modal excluir
 $(function() {
 	$('#exclusaoModal').on('show.bs.modal', function(event) {
-		console.log('abriu modal');
-		
 		var button = $(event.relatedTarget);
 		var descricaoUsuario = button.data('usuario');
 		$('#codigoUsuarioExcluir').val(button.data('codigo'));
@@ -44,7 +86,6 @@ $(function() {
 	});
 	
 	$('#btnExcluir').click(function() {
-		console.log($('#codigoUsuarioExcluir').val());
 		deletar($('#codigoUsuarioExcluir').val());			
 	});
 });

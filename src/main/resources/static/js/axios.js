@@ -8,7 +8,24 @@ async function getAll() {
 	await api.get('/listar')
 	.then(response => {
 		resultGetAll(response.data);
-		//função resultGetAll deve ser iplementado na pagina recebendo parâmetro usuarios;
+	})
+	.catch(error => {
+		console.log(error)
+		$('#error').addClass('alert alert-danger');
+		$('#error').html('Erro inesperado. ' + error);
+	})
+}
+
+async function getUsuario(usuario_id) {
+	// Inicia requisição AJAX com o axios
+	await api.get('/' + usuario_id)
+	.then(response => {
+		let usuario = response.data;
+		$("#txtNome").val(usuario.nome);
+		$("#txtEmail").val(usuario.email);
+		$("#txtCPF").val(usuario.cpf);
+		$("#txtSenha").val(usuario.senha);
+		$("#ddlSituacao").val(usuario.situacao);
 	})
 	.catch(error => {
 		console.log(error)
@@ -22,10 +39,27 @@ async function save(usuario) {
 	.then(function (response) {
 		$('[role="msgAdicionar"]').addClass('alert alert-success');
 		$('[role="msgAdicionar"]').html('Usuário cadastrado com sucesso.');
+		limparCampos();
+		getAll();
     })
     .catch(function (err) {
 		$('[role="msgAdicionar"]').addClass('alert alert-warning');
 	    $('[role="msgAdicionar"]').html('Erro ao salvar usuário. \n' + err.message);
+    });
+}
+
+async function saveUser(usuario) {
+	await api.put('/' + usuario.id, usuario)
+	.then(function (response) {
+		$('[role="msgAdicionar"]').addClass('alert alert-success');
+		$('[role="msgAdicionar"]').html('Usuário editado com sucesso.');
+		limparCampos();
+		getAll();
+    })
+    .catch(function (err) {
+		$('[role="msgAdicionar"]').addClass('alert alert-warning');
+	    $('[role="msgAdicionar"]').html('Erro ao editar usuário. \n' + err.message);
+		console.log(err.message);
     });
 }
 
@@ -42,3 +76,4 @@ async function deletar(id) {
 	    return false;
     });
 }
+
