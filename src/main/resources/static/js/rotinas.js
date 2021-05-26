@@ -1,5 +1,7 @@
 function carregarTabela(){
-	$('#tabela').DataTable();
+	$('#tabela').DataTable({
+        "ordering": [[ 1, "asc" ]]
+    });
 }
 
 $(function() {

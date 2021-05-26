@@ -18,7 +18,12 @@
 	<script src="js/axios.js"></script>
 	<script src="js/rotinas.js"></script>
 	<style>
-		td {padding: 0px;}
+		.table td {
+			vertical-align: middle;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+		tbody > tr:hover {background-color:#f3f3f3;}
 	</style>
 </head>
 <body>
@@ -31,7 +36,7 @@
 			<div class="form-group">
 				<button type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#adicionarEditarModal' data-acao="ADICIONAR">Adicionar</button>
 			</div>
-			<table id="tabela" class="table table-bordered hover text-center" style="width:100%">
+			<table id="tabela" class="table table-bordered hover text-center align-middle" style="width:100%">
 		        <thead>
 		            <tr>
 		            	<th class="text-center">Ações</th>
@@ -141,7 +146,7 @@
 		//resultado de getAll() - axios.js;
 		function resultGetAll(usuarios) {
 			var table = $('#tabela').DataTable();
-			table.clear().draw();
+			table.clear();
 			usuarios.map(function(usuario) {
 				table.row.add( [
 					"<a type='button' class='btn btn-link' title='Editar' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#adicionarEditarModal' data-acao='EDITAR' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
@@ -156,10 +161,10 @@
 					 usuario.senha,
 					 usuario.situacao,
 					 FormataStringData(usuario.dataCriacao)
-				] ).draw();
+				] );
+				table.order([ 1, "asc" ]).draw();
 	    	});
 			$('[rel="tooltip"]').tooltip();
-			carregarTabela();
 		};
 		
 		//resultado de getUsuario(usuario) - axios.js;
