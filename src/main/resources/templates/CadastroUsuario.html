@@ -36,6 +36,7 @@
 			<div class="form-group">
 				<button type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#adicionarEditarModal' data-acao="ADICIONAR">Adicionar</button>
 			</div>
+			<input type="hidden" id="nomeUsuarioExcluir" value=""></input>
 			<table id="tabela" class="table table-bordered hover text-center align-middle" style="width:100%">
 		        <thead>
 		            <tr>
@@ -148,23 +149,8 @@
 			var table = $('#tabela').DataTable();
 			table.clear();
 			usuarios.map(function(usuario) {
-				table.row.add( [
-					"<a type='button' class='btn btn-link' title='Editar' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#adicionarEditarModal' data-acao='EDITAR' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
-						+"<span class='bi bi-pencil'></span>"
-					+ "</a>"
-					+ "<a type='button' class='btn btn-link text-danger' title='Excluir' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#exclusaoModal' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
-						+ "<span class='bi bi-trash'></span>"
-					+ "</a>",
-					 usuario.nome,
-					 usuario.email,
-					 usuario.cpf,
-					 usuario.senha,
-					 usuario.situacao,
-					 FormataStringData(usuario.dataCriacao)
-				] );
-				table.order([ 1, "asc" ]).draw();
+				adicionarLinha(usuario);
 	    	});
-			$('[rel="tooltip"]').tooltip();
 		};
 		
 		//resultado de getUsuario(usuario) - axios.js;
@@ -178,8 +164,8 @@
 		}
 		
 		//resultado de adicionar(usuario) - axios.js;
-		async function resultAdicionar(response){
-			await getAll();
+		async function resultAdicionar(usuario){
+			adicionarLinha(usuario);
 			$('[role="msgAdicionar"]').addClass('alert alert-success');
 			$('[role="msgAdicionar"]').html('Usuário cadastrado com sucesso.');
 			limparCampos();
@@ -194,11 +180,54 @@
 		}
 		
 		//resultado de deletar(id) - axios.js;
-		async function resultDeletar(response){			
-			await getAll();
+		function resultDeletar(response){
+			var nome = $('#nomeUsuarioExcluir').val();
+			removerLinhaPorNome(nome);
 			$('#exclusaoModal').modal('hide');
 		}
 		
+		//adiciona linha na tabela
+		function adicionarLinha(usuario){
+			var table = $('#tabela').DataTable();
+			table.row.add( [
+				"<a type='button' class='btn btn-link' title='Editar' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#adicionarEditarModal' data-acao='EDITAR' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
+					+"<span class='bi bi-pencil'></span>"
+				+ "</a>"
+				+ "<a type='button' class='btn btn-link text-danger' title='Excluir' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#exclusaoModal' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
+					+ "<span class='bi bi-trash'></span>"
+				+ "</a>",
+				 usuario.nome,
+				 usuario.email,
+				 usuario.cpf,
+				 usuario.senha,
+				 usuario.situacao,
+				 FormataStringData(usuario.dataCriacao)
+			] );
+			table.order([ 1, "asc" ]).draw();
+			$('[rel="tooltip"]').tooltip();
+		}
+		
+		function editarLinhaPorNome(nome){
+			var table = $('#tabela').DataTable();
+			var indexes = table
+				.rows()
+				.indexes()
+				.filter( function ( value, index ) {
+					return nome === table.row(value).data()[1];
+				} );
+		}
+		
+		function removerLinhaPorNome(nome){
+			var table = $('#tabela').DataTable();
+			var indexes = table
+			.rows()
+			.indexes()
+			.filter( function ( value, index ) {
+	        	return nome === table.row(value).data()[1];
+	      	} );
+			
+	     	table.rows(indexes).remove().draw();
+		}
 	</script>
 </body>
 </html>

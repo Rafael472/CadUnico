@@ -91,6 +91,7 @@ $(function() {
 		var button = $(event.relatedTarget);
 		var descricaoUsuario = button.data('usuario');
 		$('#codigoUsuarioExcluir').val(button.data('codigo'));
+		$('#nomeUsuarioExcluir').val(descricaoUsuario);
 		
 		var modal = $(this);
 		modal.find('.body-modal').html('Tem certeza que deseja excluir o usuário <strong>' + descricaoUsuario + '</strong>?');
@@ -98,6 +99,7 @@ $(function() {
 	});
 	
 	$('#btnExcluir').click(function() {
-		deletar($('#codigoUsuarioExcluir').val());			
+		deletar($('#codigoUsuarioExcluir').val());
+		
 	});
 });

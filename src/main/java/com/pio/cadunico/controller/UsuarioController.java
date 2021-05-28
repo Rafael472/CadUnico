@@ -76,7 +76,6 @@ public class UsuarioController {
 			return ResponseEntity.notFound().build();
 		
 		usuarioService.excluir(usuarioId);
-		
 		return ResponseEntity.noContent().build();
 	}
 	

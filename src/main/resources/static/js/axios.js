@@ -36,7 +36,7 @@ async function getUsuario(usuario_id) {
 async function adicionar(usuario) {
 	await api.post('/cadastrar', usuario)
 	.then(function (response) {
-		resultAdicionar(response);
+		resultAdicionar(response.data);
     })
     .catch(function (error) {
 	    let seletor = '[role="msgAdicionar"]';
