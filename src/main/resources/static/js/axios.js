@@ -69,17 +69,19 @@ async function deletar(id) {
     });
 }
 
-function mensagemErro(error, seletor, msgRetorno){
+async function mensagemErro(error, seletor, msgRetorno){
 	$(seletor).addClass('alert alert-warning');
 	console.log(error.message);
 	console.log("STATUS: " + error.response.status);
+	console.log("STATUS: " + error.response.data);
+	console.log("STATUS: " + error.response.data.errors);
 	
 	if (error.response) {
 		// A Solicitação foi feita, mas o servidor retornou erro
 		if(seletor.length > 0)
 			$(seletor).append(msgRetorno + "<br>");
 			
-		error.response.data.errors.map(function(erro){
+		await error.response.data.errors.map(function(erro){
 		    $(seletor).append(erro.defaultMessage + "<br>");
 			console.log(erro.defaultMessage);
 		})
