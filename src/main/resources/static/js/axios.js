@@ -74,16 +74,15 @@ async function mensagemErro(error, seletor, msgRetorno){
 	console.log(error.message);
 	console.log("STATUS: " + error.response.status);
 	console.log(error.response.data);
-	console.log(error.response.data.errors);
 	
 	if (error.response) {
 		// A Solicitação foi feita, mas o servidor retornou erro
 		if(seletor.length > 0)
 			$(seletor).append(msgRetorno + "<br>");
 			
-		await error.response.data.errors.map(function(erro){
-		    $(seletor).append(erro.defaultMessage + "<br>");
-			console.log(erro.defaultMessage);
+		await error.response.data.campos.map(function(erro){
+		    $(seletor).append(erro.mensagem + "<br>");
+			console.log(erro.mensagem);
 		})
     } else if (error.request) {
 		// A solicitação foi feita, mas nenhuma resposta foi recebida

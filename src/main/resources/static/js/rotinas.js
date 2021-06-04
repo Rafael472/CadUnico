@@ -13,6 +13,9 @@ $(function() {
 	  $('[role="msgAdicionar"]').html('');
 	  $('[role="msgAdicionar"]').removeClass();
 	});
+	
+    var txtCpf = $("#txtCPF");
+    txtCpf.mask('000.000.000-00', {reverse: true});
 });
 
 //Formata String de yyyy-mm-dd para dd/mm/yyyy
