@@ -1,0 +1,233 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8"></meta>
+	<title>Cadastro de Usuários</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"></link>
+	<link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap4.min.css"></link>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap4.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="js/axios.js"></script>
+	<script src="js/rotinas.js"></script>
+	<style>
+		.table td {
+			vertical-align: middle;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+		tbody > tr:hover {background-color:#f3f3f3;}
+	</style>
+</head>
+<body>
+	<form class="card">
+		<div class="card-header">
+			<h5>Cadastro de Usuários</h5>
+		</div>
+		<div class="card-body">
+			<div id="msgRetorno"></div>
+			<div class="form-group">
+				<button type="button" class="btn btn-primary btn-sm" data-toggle='modal' data-target='#adicionarEditarModal' data-acao="ADICIONAR">Adicionar</button>
+			</div>
+			<input type="hidden" id="nomeUsuarioExcluir" value=""></input>
+			<table id="tabela" class="table table-bordered hover text-center align-middle" style="width:100%">
+		        <thead>
+		            <tr>
+		            	<th class="text-center">Ações</th>
+		                <th class="text-center">Nome</th>
+		                <th class="text-center">Email</th>
+		                <th class="text-center">CPF</th>
+		                <th class="text-center">Senha</th>
+		                <th class="text-center">Situação</th>
+		                <th class="text-center">Data Criação</th>
+		            </tr>
+		        </thead>
+		        
+		        <tfoot>
+		            <tr>
+		            	<th class="text-center">Ações</th>
+		                <th class="text-center">Nome</th>
+		                <th class="text-center">Email</th>
+		                <th class="text-center">CPF</th>
+		                <th class="text-center">Senha</th>
+		                <th class="text-center">Situação</th>
+		                <th class="text-center">Data Criação</th>
+		            </tr>
+		        </tfoot>
+		    </table>
+	    </div>
+    </form>
+    <!-- Modal Adicionar/Editar -->
+    <div class="modal fade" id="adicionarEditarModal" tabindex="-1" role="dialog" aria-labelledby="adicionarModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="adicionarEditarTitle">Adicionar Usuário</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div role="msgAdicionar"></div>
+					<input type="hidden" id="acao" value=""></input>
+					<input type="hidden" id="codigoUsuarioEditar" value=""></input>
+					<div class="form-group">
+						<label for="txtNome">Nome</label>
+						<input class="form-control form-control-sm" id="txtNome" type="text"></input>
+					</div>
+					<div class="form-group">
+						<label for="txtEmail">Email</label>
+						<input class="form-control form-control-sm" id="txtEmail" type="text"></input>
+					</div>
+					<div class="form-group">
+						<label for="txtCPF">CPF</label>
+						<input class="form-control form-control-sm" id="txtCPF" type="text"></input>
+					</div>
+					<div class="form-group">
+						<label for="txtSenha">Senha</label>
+						<input class="form-control form-control-sm" id="txtSenha" type="password"></input>
+					</div>
+					<div class="form-group">
+				    	<label for="ddlSituacao">Situação</label>
+				    	<select class="form-control form-control-sm col-sm-5" id="ddlSituacao">
+				      		<option value="ATIVO">Ativo</option>
+				      		<option value="BLOQUEADO">Bloqueado</option>
+				    	</select>
+				  	</div>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+					<button type="button" class="btn btn-primary" id="btnGravar">Adicionar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Fim Modal Adicionar/Editar -->
+	
+	<!-- Modal Exclusão -->
+	<div class="modal fade" id="exclusaoModal" tabindex="-1" onLoad="jsAbreModal();" aria-labelledby="exclusaoModalLabel" aria-hidden="true">
+  		<div class="modal-dialog">
+  			<form th:attr="data-url='/usuario/excluir'" th:method="DELETE">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title" id="exampleModalLabel">Excluir</h5>
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          			<span aria-hidden="true">&times;</span>
+	        			</button>
+		      		</div>
+					<div class="modal-body">
+						<div role="msgExcluir"></div>
+						<input type="hidden" id="codigoUsuarioExcluir" value=""></input>
+						<div class="body-modal">
+						Deseja excluir o usuario ... ?
+						</div>
+					</div>
+	      			<div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				        <button type="button" id="btnExcluir" class="btn btn-danger">Excluir</button>
+		      		</div>
+		    	</div>
+		    </form>
+	  	</div>
+	</div>
+	<!-- Fim Modal Exclusão -->
+	<script>
+		//busca todos os usuários para carregar a tabela - axios.js;	
+		getAll();
+		
+		//resultado de getAll() - axios.js;
+		function resultGetAll(usuarios) {
+			var table = $('#tabela').DataTable();
+			table.clear();
+			usuarios.map(function(usuario) {
+				adicionarLinha(usuario);
+	    	});
+		};
+		
+		//resultado de getUsuario(usuario) - axios.js;
+		function resultGetUsuario(response){
+			let usuario = response;
+			$("#txtNome").val(usuario.nome);
+			$("#txtEmail").val(usuario.email);
+			$("#txtCPF").val(usuario.cpf);
+			$("#txtSenha").val(usuario.senha);
+			$("#ddlSituacao").val(usuario.situacao);			
+		}
+		
+		//resultado de adicionar(usuario) - axios.js;
+		async function resultAdicionar(usuario){
+			adicionarLinha(usuario);
+			$('[role="msgAdicionar"]').addClass('alert alert-success');
+			$('[role="msgAdicionar"]').html('Usuário cadastrado com sucesso.');
+			limparCampos();
+		}
+		
+		//resultado de editar(usuario) - axios.js;
+		async function resultEditar(response){
+			await getAll();
+			$('#msgRetorno').addClass('alert alert-success');
+			$('#msgRetorno').html('Usuário editado com sucesso.');
+			$('#adicionarEditarModal').modal('hide');
+		}
+		
+		//resultado de deletar(id) - axios.js;
+		function resultDeletar(response){
+			var nome = $('#nomeUsuarioExcluir').val();
+			removerLinhaPorNome(nome);
+			$('#exclusaoModal').modal('hide');
+		}
+		
+		//adiciona linha na tabela
+		function adicionarLinha(usuario){
+			var table = $('#tabela').DataTable();
+			table.row.add( [
+				"<a type='button' class='btn btn-link' title='Editar' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#adicionarEditarModal' data-acao='EDITAR' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
+					+"<span class='bi bi-pencil'></span>"
+				+ "</a>"
+				+ "<a type='button' class='btn btn-link text-danger' title='Excluir' rel='tooltip' data-placement='top' data-toggle='modal' data-target='#exclusaoModal' data-codigo='"+ usuario.id +"' data-usuario='"+ usuario.nome +"'>"
+					+ "<span class='bi bi-trash'></span>"
+				+ "</a>",
+				 usuario.nome,
+				 usuario.email,
+				 usuario.cpf,
+				 usuario.senha,
+				 usuario.situacao,
+				 FormataStringData(usuario.dataCriacao)
+			] );
+			table.order([ 1, "asc" ]).draw();
+			$('[rel="tooltip"]').tooltip();
+		}
+		
+		function editarLinhaPorNome(nome){
+			var table = $('#tabela').DataTable();
+			var indexes = table
+				.rows()
+				.indexes()
+				.filter( function ( value, index ) {
+					return nome === table.row(value).data()[1];
+				} );
+		}
+		
+		function removerLinhaPorNome(nome){
+			var table = $('#tabela').DataTable();
+			var indexes = table
+			.rows()
+			.indexes()
+			.filter( function ( value, index ) {
+	        	return nome === table.row(value).data()[1];
+	      	} );
+			
+	     	table.rows(indexes).remove().draw();
+		}
+	</script>
+</body>
+</html>
