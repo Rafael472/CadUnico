@@ -73,8 +73,8 @@ async function mensagemErro(error, seletor, msgRetorno){
 	$(seletor).addClass('alert alert-warning');
 	console.log(error.message);
 	console.log("STATUS: " + error.response.status);
-	console.log("STATUS: " + error.response.data);
-	console.log("STATUS: " + error.response.data.errors);
+	console.log(error.response.data);
+	console.log(error.response.data.errors);
 	
 	if (error.response) {
 		// A Solicitação foi feita, mas o servidor retornou erro
