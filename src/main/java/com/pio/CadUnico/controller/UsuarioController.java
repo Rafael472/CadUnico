@@ -67,7 +67,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuario);
 	}
 
-	@RequestMapping("/excluir/{usuarioId}")
+	@DeleteMapping("/excluir/{usuarioId}")
 	public ResponseEntity<Void> remover(@PathVariable Long usuarioId){
 		if(!usuarioRepository.existsById(usuarioId))
 			return ResponseEntity.notFound().build();
