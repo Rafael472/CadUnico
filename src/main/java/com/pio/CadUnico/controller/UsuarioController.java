@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,25 +17,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pio.CadUnico.model.Usuario;
 import com.pio.CadUnico.repository.UsuarioRepository;
 import com.pio.CadUnico.service.UsuarioService;
 
-@Controller
+@RestController
+@CrossOrigin
 @RequestMapping("/usuario")
 public class UsuarioController {
 
 	@Autowired UsuarioService usuarioService;
-	
 	@Autowired UsuarioRepository usuarioRepository;
 	
-	@RequestMapping({"","/"})
-	public ModelAndView pagina() {
-		ModelAndView mv = new ModelAndView("CadastroUsuario");
-		return mv;
-	}
 	
 	@GetMapping("/listar")
 	public @ResponseBody List<Usuario> listar() {

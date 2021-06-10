@@ -1,6 +1,6 @@
 //parâmetros de conexão com o controller
 const api = axios.create({
-	baseURL: '/usuario',
+	baseURL: 'https://cadunico-api.herokuapp.com/usuario',
 	headers: {"Access-Control-Allow-Origin": "*"}
 })
 
