@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,16 +47,15 @@ public class UsuarioController {
 	@PostMapping("/cadastrar")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario cadastrar(@Validated @RequestBody Usuario usuario){
-		return usuarioService.salvar(usuario);
+		return usuarioService.cadastrar(usuario);
 	}
 	
 	@PutMapping("/{usuarioId}")
-	public ResponseEntity<Usuario> atualizar(@Validated @RequestBody Usuario usuario, @PathVariable Long usuarioId){
+	public ResponseEntity<Usuario> editar(@Validated @RequestBody Usuario usuario, @PathVariable Long usuarioId){
 		if(!usuarioRepository.existsById(usuarioId))
 			return ResponseEntity.notFound().build();
 		
-		usuario.setId(usuarioId);
-		usuario = usuarioService.salvar(usuario);
+		usuario = usuarioService.editar(usuario, usuarioId);
 		return ResponseEntity.ok(usuario);
 	}
 
