@@ -32,7 +32,7 @@ public class UsuarioController {
 	@Autowired UsuarioRepository usuarioRepository;
 	
 	@GetMapping("/listar")
-	public @ResponseBody List<Usuario> listar() {
+	public List<Usuario> listar() {
 		return usuarioRepository.findAll();
 	}
 	
@@ -47,7 +47,7 @@ public class UsuarioController {
 	
 	@PostMapping("/cadastrar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody Usuario cadastrar(@Validated @RequestBody Usuario usuario){
+	public Usuario cadastrar(@Validated @RequestBody Usuario usuario){
 		return usuarioService.salvar(usuario);
 	}
 	

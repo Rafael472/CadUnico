@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.pio.CadUnico.CadUnicoApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.744 s - in com.pio.CadUnico.CadUnicoApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.895 s - in com.pio.CadUnico.CadUnicoApplicationTests
